@@ -1,0 +1,206 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Express authentication using passport",
+    "version": "1.0.0",
+    "title": "Express Auth",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags": [
+    {
+      "name": "users",
+      "description": "Everything about your Users"
+    }
+  ],
+  "host": "localhost:5000",
+  "basePath": "/api/v1",
+  "schemes": ["http", "https"],
+  "paths": {
+    "/users/register": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Add a new user to the database",
+        "description": "",
+        "operationId": "addUser",
+        "consumes": ["application/json", "application/xml"],
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User object that needs to be added to the database",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "test"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "test@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "password"
+                },
+                "password2": {
+                  "type": "string",
+                  "example": "password"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Logs user into the system",
+        "description": "",
+        "operationId": "loginUser",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User credentials for login",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "test@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "password"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Get current user",
+        "operationId": "getCurrentUser",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "$ref": "#/parameters/jwtAuthorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "jwtAuthorization": {
+      "name": "Authorization",
+      "description": "JWT token",
+      "type": "string",
+      "in": "header",
+      "required": true
+    }
+  },
+  "definitions": {
+    "Users": {
+      "type": "object",
+      "required": ["name", "email", "password"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "example": "test"
+        },
+        "email": {
+          "type": "string",
+          "example": "test@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "test@gmail.com"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "isActive": {
+          "type": "boolean",
+          "example": true
+        },
+        "role": {
+          "type": "string",
+          "description": "user roles",
+          "enum": ["super admin", "admin", "user"]
+        }
+      }
+    }
+  }
+}

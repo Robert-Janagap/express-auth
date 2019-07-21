@@ -1,13 +1,18 @@
 const express = require("express");
 require("dotenv").config();
-// database
-require("./config/database");
-
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const path = require("path");
 
 const app = express();
+
+// api endpoints documentation
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// database
+require("./config/database");
 
 // middlewares
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,10 +32,10 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// api endpoints
+// api endpoints routes
 const users = require("./routes/api/users");
 
-// urls
+// api endpoints
 let API_V1 = "/api/v1";
 app.use(`${API_V1}/users`, users);
 

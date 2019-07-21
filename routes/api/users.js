@@ -17,6 +17,7 @@ const validateLoginInput = require("../../util/validation/login");
 // @access public
 router.post("/register", async (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
+  const { name, email, role, password } = req.body;
 
   if (!isValid) return res.status(400).json(errors);
 
@@ -32,12 +33,12 @@ router.post("/register", async (req, res) => {
         d: "mm" // default
       });
 
-      const { name, email, role, password } = req.body;
       const newUser = new Users({
         name,
         email,
         role,
-        password
+        password,
+        avatar
       });
 
       bcrypt.genSalt(10, (err, salt) => {
@@ -47,6 +48,7 @@ router.post("/register", async (req, res) => {
           newUser.password = hash;
 
           const user = await newUser.save();
+
           return res.status(201).json(user);
         });
       });
@@ -66,14 +68,13 @@ router.post("/login", async (req, res) => {
 
   const { email, password } = req.body;
 
-  const user = await Users.findOne({ email });
-
-  if (!user) {
-    errors.email = "User not found";
-    return res.status(404).json(errors);
-  }
-
   try {
+    const user = await Users.findOne({ email });
+    if (!user) {
+      errors.email = "User not found";
+      return res.status(404).json(errors);
+    }
+
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         const payload = { id: user.id, name: user.name, avatar: user.avatar };

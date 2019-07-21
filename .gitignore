@@ -88,4 +88,4 @@ typings/
 .dynamodb/
 
 # hide dev keys
-./config/keys/keys.dev.js
+/config/keys/keys.dev.js

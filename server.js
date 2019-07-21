@@ -27,11 +27,12 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// api
+// api endpoints
 const users = require("./routes/api/users");
 
 // urls
-app.use("/users", users);
+let API_V1 = "/api/v1";
+app.use(`${API_V1}/users`, users);
 
 const port = process.env.PORT || process.env.PORT_HOST;
 
